@@ -5,7 +5,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import make_pipeline
 
-# Enkel data för träning (baserat på din notebook)
+# Data för träning
 data = {
     'text': [
         'Jag älskar denna produkt, den är fantastisk!', 
@@ -16,20 +16,18 @@ data = {
     ],
     'label': ['positiv', 'negativ', 'neutral', 'positiv', 'negativ']
 }
-
 df = pd.DataFrame(data)
 
-# Skapa modell-pipeline
+# Skapa och träna modell
 model = make_pipeline(TfidfVectorizer(), MultinomialNB())
-
-# Träna modellen
 X_train, X_test, y_train, y_test = train_test_split(df['text'], df['label'], test_size=0.2)
 model.fit(X_train, y_train)
 
-# Streamlit UI
-st.title("Textklassificering - Analys")
-user_input = st.text_input("Skriv en text för att analysera sentiment:")
+# Webbgränssnitt
+st.title("🤖 Textklassificering")
+st.write("Skriv in en text nedan så gissar AI:n om den är positiv eller negativ.")
 
+user_input = st.text_input("Din text:")
 if user_input:
     prediction = model.predict([user_input])
-    st.write(f"Modellen klassificerar detta som: **{prediction[0]}**")
+    st.success(f"Resultat: {prediction[0]}")
